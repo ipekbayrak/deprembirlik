@@ -23,16 +23,33 @@ const AnnouncementList = () => {
     return <div>Loading...</div>;
   }
 
+  const TipOlustur = (tip) => {
+    if (tip === 'gocuk') {
+      return 'Göçük';
+    } else if (tip === 'kayip') {
+      return 'Kayıp';
+    } else if (tip === 'erzak') {
+      return 'Erzak';
+    } else if (tip === 'barinma') {
+      return 'Barınma';
+    } else if (tip === 'ulasim') {
+      return 'Ulaşım';
+    }
+  };
+
   return (
-    <View>
+    <View style={styles.textContainer}>
       {announcements.map((announcement, index) => (
         <View key={index} style={styles.itemContainer}>
           {announcement.thumbnail && (
             <Image source={{ uri: announcement.thumbnail }} style={styles.thumbnail} />
           )}
           <View style={styles.textContainer}>
+            <View style={styles.detailsContainer}>
+              <Text style={styles.type}>{TipOlustur(announcement.type)}</Text>
+            </View>
             <Text style={styles.title}>{announcement.title}</Text>
-            <Text style={styles.description}>{announcement.description}</Text>
+            <Text style={styles.description}>Açıklama: {announcement.description}</Text>
             <View style={styles.detailsContainer}>
               <Text style={styles.time}>{announcement.time}</Text>
               {announcement.status === 'passed' && (
@@ -46,8 +63,7 @@ const AnnouncementList = () => {
               )}
             </View>
             <View style={styles.detailsContainer}>
-              <Text>Category: {announcement.category}</Text>
-              <Text>Location: {announcement.location}</Text>
+              <Text>Durum: {announcement.category}</Text>
             </View>
           </View>
         </View>
@@ -59,17 +75,27 @@ const AnnouncementList = () => {
 const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: 'row',
-    marginVertical: 10
+    marginVertical: 10,
+    justifyContent: 'flex-start',
+    backgroundColor: 'aliceblue',
+    borderRadius: 10,
+    width: '100%',
+    height: 'auto'
   },
   thumbnail: {
     width: 100,
     height: 100,
     resizeMode: 'cover',
-    borderRadius: 10
+    borderRadius: 10,
+    justifyContent: 'flex-start'
+
   },
   textContainer: {
+    justifyContent: 'flex-start',
     flex: 1,
-    marginLeft: 10
+    width: '100%',
+    height: 'auto',
+    padding: '15px'
   },
   title: {
     fontWeight: 'bold',
@@ -82,7 +108,11 @@ const styles = StyleSheet.create({
   detailsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'flex-start'
+  },
+  type: {
+    fontStyle: 'italic',
+    fontSize: '0.8em'
   },
   time: {
     fontSize: 16

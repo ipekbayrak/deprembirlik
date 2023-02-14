@@ -4,8 +4,10 @@ import { AntDesign } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AnnouncementAdd } from './AnnouncementAdd';
 import AnnouncementList from './AnnouncementList';
+import toastHelper from '../toastHelper';
+import { announcementStyles as styles } from '../style';
 
-export const Announcement = ({ navigation }) => {
+export const Announcement = ({ navigation, user }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [announcements, setAnnouncements] = useState([
     { id: 1, title: 'Announcement 1', description: 'This is the first announcement' },
@@ -19,7 +21,14 @@ export const Announcement = ({ navigation }) => {
       />
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => setModalVisible(true)}
+        onPress={() => {
+          if (user) {
+            setModalVisible(true);
+            return;
+          }
+          toastHelper('Duyuru ekleyebilmek için giriş yapmalısınız!', 'error');
+          navigation.navigate('Kayıt');
+        }}
       >
         <AntDesign name='plus' size={24} color='white' />
       </TouchableOpacity>
@@ -29,37 +38,11 @@ export const Announcement = ({ navigation }) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <AnnouncementAdd closeModal={() => setModalVisible(false)} />
+        <AnnouncementAdd
+          closeModal={() => setModalVisible(false)}
+          user={user}
+        />
       </Modal>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  announcementContainer: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc'
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
-  description: {
-    marginTop: 8
-  },
-  addButton: {
-    position: 'absolute',
-    bottom: 16,
-    right: 16,
-    backgroundColor: '#3f51b5',
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { Map, Marker } from 'pigeon-maps';
 
-const LocationSelector = () => {
+const LocationSelector = ({ setLocation }) => {
   const [center, setCenter] = useState([50.879, 4.6997]);
   const [zoom, setZoom] = useState(11);
 
@@ -11,6 +11,7 @@ const LocationSelector = () => {
       navigator.geolocation.getCurrentPosition(
         position => {
           setCenter([position.coords.latitude, position.coords.longitude]);
+          setLocation([position.coords.latitude, position.coords.longitude]);
         },
         error => console.error(error),
         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }

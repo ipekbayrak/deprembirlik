@@ -1,44 +1,105 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-
 import { createStackNavigator } from '@react-navigation/stack';
-
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import HomeScreen from './HomeScreen';
+import { AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import HomeScreen from './HomeScreen';
+import Login from './Profile/Login';
+import Register from './Profile/Register';
+import Profil from './Profile/Profile';
+import { Toaster } from 'react-hot-toast';
+
+import Hakkinda from './Hakkinda';
 const Drawer = createDrawerNavigator();
 
 const HomeStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
 
-const Group1 = () => {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>null</Text>
-    </View>
-  );
-};
-
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [anaSayfa, setAnaSayfa] = useState('Ana Sayfa');
+
+  useEffect(() => {
+    const fetchIsLoggedIn = async () => {
+      try {
+        const value = await AsyncStorage.getItem('user') || null;
+        if (value !== null) {
+          setUser(JSON.parse(value));
+        }
+      } catch (error) {
+        console.error('Error fetching isLoggedIn from AsyncStorage: ', error);
+      }
+    };
+    fetchIsLoggedIn();
+  }, []);
 
   return (
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName='Genel'>
-        <Drawer.Screen name='Ana Sayfa' component={HomeScreen} />
-        {isLoggedIn
-          ? (
-            <Drawer.Screen name='Profil' component={Group1} />
-            )
-          : (
-            <Drawer.Screen name='Giriş' component={Group1} />
-            )}
-        <Drawer.Screen name='Hakkında' component={Group1} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        <Drawer.Navigator initialRouteName='Genel'>
+          <Drawer.Screen
+            name={anaSayfa}
+            component={props => <HomeScreen {...props} user={user} setAnaSayfa={setAnaSayfa} />}
+            options={{
+              drawerIcon: ({ focused, color, size }) => (
+                <AntDesign name='home' size={size} color={color} />
+              )
+            }}
+          />
+          {user
+            ? (
+              <Drawer.Screen
+                name='Profil'
+                component={props => <Profil {...props} setUser={setUser} />}
+                options={{
+                  drawerIcon: ({ focused, color, size }) => (
+                    <MaterialCommunityIcons name='account' size={size} color={color} />
+                  )
+                }}
+              />
+              )
+            : (
+              <>
+                <Drawer.Screen
+                  name='Giriş'
+                  component={props => <Login {...props} setUser={setUser} />}
+                  options={{
+                    drawerIcon: ({ focused, color, size }) => (
+                      <MaterialIcons name='person' size={size} color={color} />
+                    )
+                  }}
+                />
+                <Drawer.Screen
+                  name='Kayıt'
+                  component={props => <Register {...props} setUser={setUser} />}
+                  options={{
+                    drawerIcon: ({ focused, color, size }) => (
+                      <MaterialIcons name='person-add' size={size} color={color} />
+                    )
+                  }}
+                />
+              </>
+              )}
+          <Drawer.Screen
+            name='Hakkında'
+            component={Hakkinda}
+            options={{
+              drawerIcon: ({ focused, color, size }) => (
+                <MaterialIcons name='info' size={size} color={color} />
+              )
+            }}
+          />
+        </Drawer.Navigator>
+      </NavigationContainer>
+      <Toaster
+        position='bottom-center'
+      />
+    </>
   );
 };
 
