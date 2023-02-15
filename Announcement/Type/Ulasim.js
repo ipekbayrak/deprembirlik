@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Picker, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import LocationSelector from './LocationSelector';
-import PhotoUpload from './PhotoUpload';
+import LocationSelector from '../LocationSelector';
+import PhotoUpload from '../PhotoUpload';
 
 const Ulasim = ({ closeModal, setAnnouncement }) => {
   return (

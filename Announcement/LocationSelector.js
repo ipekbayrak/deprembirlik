@@ -11,7 +11,7 @@ const LocationSelector = ({ setLocation }) => {
       navigator.geolocation.getCurrentPosition(
         position => {
           setCenter([position.coords.latitude, position.coords.longitude]);
-          setLocation([position.coords.latitude, position.coords.longitude]);
+          setLocation && setLocation([position.coords.latitude, position.coords.longitude]);
         },
         error => console.error(error),
         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import CategorySelect from './CategorySelect';
-import GocukComponent from './GocukComponent';
+import GocukComponent from './Type/GocukComponent';
 import styles from '../style';
-import Kayip from './Kayip';
-import Erzak from './Erzak';
-import Barinma from './Barinma';
-import Ulasim from './Ulasim';
+import Kayip from './Type/Kayip';
+import Erzak from './Type/Erzak';
+import Barinma from './Type/Barinma';
+import Ulasim from './Type/Ulasim';
 import toastHelper from '../toastHelper';
 
-export const AnnouncementAdd = ({ closeModal, user }) => {
+export const AnnouncementAdd = ({ closeModal, user, fetchAnnouncements }) => {
   const [selectedCategory, setSelectedCategory] = useState();
   const [active, setActive] = useState(false);
   const [announcement, setAnnouncement] = useState({});
@@ -29,6 +29,7 @@ export const AnnouncementAdd = ({ closeModal, user }) => {
       if (data.status === true) {
         toastHelper('Duyuru eklendi!', 'success');
         closeModal();
+        fetchAnnouncements();
         // Store the login state in AsyncStorage
         // Navigate to the Home screen
         // navigation.navigate('Ana Sayfa');
@@ -64,13 +65,14 @@ export const AnnouncementAdd = ({ closeModal, user }) => {
           >
             <Text style={styles.buttonText}>Gönder</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={closeModal}
-          >
-            <Text style={styles.buttonText}>İptal</Text>
-          </TouchableOpacity>
+
         </>)}
+      <TouchableOpacity
+        style={styles.saveButton}
+        onPress={closeModal}
+      >
+        <Text style={styles.buttonText}>İptal</Text>
+      </TouchableOpacity>
 
     </ScrollView>
   );

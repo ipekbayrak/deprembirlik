@@ -1,23 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Modal } from 'react-native';
+import React from 'react';
+import { View, TouchableOpacity, Modal } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { createStackNavigator } from '@react-navigation/stack';
 import { AnnouncementAdd } from './AnnouncementAdd';
 import AnnouncementList from './AnnouncementList';
 import toastHelper from '../toastHelper';
 import { announcementStyles as styles } from '../style';
 
-export const Announcement = ({ navigation, user }) => {
+export const Announcement = ({ navigation, user, announcements, fetchAnnouncements, loading }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [announcements, setAnnouncements] = useState([
-    { id: 1, title: 'Announcement 1', description: 'This is the first announcement' },
-    { id: 2, title: 'Announcement 2', description: 'This is the second announcement' }
-  ]);
 
   return (
     <View style={styles.container}>
       <AnnouncementList
         announcements={announcements}
+        loading={loading}
       />
       <TouchableOpacity
         style={styles.addButton}
@@ -40,6 +36,7 @@ export const Announcement = ({ navigation, user }) => {
       >
         <AnnouncementAdd
           closeModal={() => setModalVisible(false)}
+          fetchAnnouncements={fetchAnnouncements}
           user={user}
         />
       </Modal>

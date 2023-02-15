@@ -1,24 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
-const AnnouncementList = () => {
-  const [announcements, setAnnouncements] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchAnnouncements = async () => {
-      try {
-        const response = await fetch('https://data.mongodb-api.com/app/data-zaqgh/endpoint/get');
-        const data = await response.json();
-        setAnnouncements(data);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchAnnouncements();
-  }, []);
-
+const AnnouncementList = ({ announcements, loading }) => {
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -37,10 +20,38 @@ const AnnouncementList = () => {
     }
   };
 
+  const timeAgo = (utcTime) => {
+    const date = new Date(utcTime);
+    const now = new Date();
+    const diff = (now.getTime() - date.getTime()) / 1000;
+
+    if (diff < 60) {
+      return `${Math.floor(diff)} saniye${diff < 2 ? '' : 's'} önce`;
+    } else if (diff < 3600) {
+      const minutes = Math.floor(diff / 60);
+      return `${minutes} dakika${minutes < 2 ? '' : 's'} önce`;
+    } else if (diff < 86400) {
+      const hours = Math.floor(diff / 3600);
+      return `${hours} saat${hours < 2 ? '' : 's'} önce`;
+    } else if (diff < 604800) {
+      const days = Math.floor(diff / 86400);
+      return `${days} gün${days < 2 ? '' : 's'} önce`;
+    } else if (diff < 2592000) {
+      const weeks = Math.floor(diff / 604800);
+      return `${weeks} hafta${weeks < 2 ? '' : 's'} önce`;
+    } else if (diff < 31536000) {
+      const months = Math.floor(diff / 2592000);
+      return `${months} ay${months < 2 ? '' : 's'} önce`;
+    } else {
+      const years = Math.floor(diff / 31536000);
+      return `${years} yıl${years < 2 ? '' : 's'} önce`;
+    }
+  };
+
   return (
-    <View style={styles.textContainer}>
+    <ScrollView style={styles.scrollContainer}>
       {announcements.map((announcement, index) => (
-        <View key={index} style={styles.itemContainer}>
+        <TouchableOpacity key={index} style={styles.itemContainer} onPress={() => { /* add function for tap effect here */ }}>
           {announcement.thumbnail && (
             <Image source={{ uri: announcement.thumbnail }} style={styles.thumbnail} />
           )}
@@ -49,7 +60,7 @@ const AnnouncementList = () => {
               <Text style={styles.type}>{TipOlustur(announcement.type)}</Text>
             </View>
             <Text style={styles.title}>{announcement.title}</Text>
-            <Text style={styles.description}>Açıklama: {announcement.description}</Text>
+            <Text style={styles.description}>{announcement.description}</Text>
             <View style={styles.detailsContainer}>
               <Text style={styles.time}>{announcement.time}</Text>
               {announcement.status === 'passed' && (
@@ -63,12 +74,18 @@ const AnnouncementList = () => {
               )}
             </View>
             <View style={styles.detailsContainer}>
-              <Text>Durum: {announcement.category}</Text>
+              <Text>Tip: {announcement.category}</Text>
+            </View>
+            <View style={styles.rightAlign}>
+              <Text>{announcement.username}</Text>
+            </View>
+            <View style={styles.rightAlign}>
+              <Text>{announcement.date && timeAgo(announcement.date)}</Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -110,6 +127,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start'
   },
+  rightAlign: {
+    flexDirection: 'row',
+    alignItems: 'right',
+    justifyContent: 'flex-end'
+  },
   type: {
     fontStyle: 'italic',
     fontSize: '0.8em'
@@ -128,6 +150,12 @@ const styles = StyleSheet.create({
   waiting: {
     fontSize: 16,
     color: 'orange'
+  },
+  scrollContainer: {
+    backgroundColor: '#F5FCFF',
+    width: '100%',
+    height: '100%',
+    padding: '10px'
   }
 });
 

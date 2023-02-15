@@ -1,10 +1,37 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { Map, Marker } from 'pigeon-maps';
+import { AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
-const Harita = ({ navigation }) => {
+const CustomMarkerIcon = ({ name, color }) => {
+  return (
+    <MaterialCommunityIcons name={name} size={65} color={color} />
+  );
+};
+
+const Harita = ({ navigation, announcements }) => {
   const [center, setCenter] = useState([38.957264, 35.3982175]);
   const [zoom, setZoom] = useState(6);
+  const color1 = `hsl(${0 % 360}deg 39% 70%)`;
+  const color2 = `hsl(${20 % 360}deg 39% 70%)`;
+  const color3 = `hsl(${40 % 360}deg 39% 70%)`;
+  const color4 = `hsl(${60 % 360}deg 39% 70%)`;
+
+  const openInfoDialog = (announcement) => {};
+
+  const TipOlustur = (tip) => {
+    if (tip === 'gocuk') {
+      return 'Göçük';
+    } else if (tip === 'kayip') {
+      return 'Kayıp';
+    } else if (tip === 'erzak') {
+      return 'Erzak';
+    } else if (tip === 'barinma') {
+      return 'Barınma';
+    } else if (tip === 'ulasim') {
+      return 'Ulaşım';
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -19,7 +46,21 @@ const Harita = ({ navigation }) => {
             setZoom(zoom);
           }}
         >
-          <Marker width={50} anchor={center} />
+          {announcements.map((announcement, index) => (
+            <Marker
+              key={index}
+              width={50}
+              anchor={announcement.location}
+              payload={index}
+              color={
+                (announcement.type === 'kayip' && color1) ||
+                (announcement.type === 'gocuk' && color2) ||
+                (announcement.type === 'erzak' && color3) ||
+                (announcement.type === 'barinma' && color4)
+              }
+              onClick={() => openInfoDialog(announcement)}
+            />
+          ))}
         </Map>
       )}
     </View>
