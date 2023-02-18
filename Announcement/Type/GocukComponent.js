@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Picker, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Picker, Text, TextInput } from 'react-native';
 import LocationSelector from '../LocationSelector';
+import styles from '../../style';
 
-const GocukComponent = ({ closeModal, setAnnouncement }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('guncel');
-  const [location, setLocation] = useState({ latitude: 0, longitude: 0 });
-  const [phone, setPhone] = useState('');
+const GocukComponent = ({ setAnnouncement, announcement, noEdit }) => {
+  const [title, setTitle] = useState(announcement ? announcement.title : '');
+  const [description, setDescription] = useState(announcement ? announcement.description : '');
+  const [selectedCategory, setSelectedCategory] = useState(announcement ? announcement.category : 'guncel');
+  const [location, setLocation] = useState(announcement ? announcement.location : [38.895, 35.452]);
+  const [phone, setPhone] = useState(announcement ? announcement.phone : '');
 
   const handleInputChange = (e, setter) => {
     setter(e.target.value);
@@ -15,6 +16,7 @@ const GocukComponent = ({ closeModal, setAnnouncement }) => {
 
   useEffect(() => {
     setAnnouncement({
+      ...announcement,
       phone,
       title,
       description,
@@ -24,39 +26,70 @@ const GocukComponent = ({ closeModal, setAnnouncement }) => {
     });
   }, [title, phone, title, description, selectedCategory, location]);
 
+  const valueToPicker = (value) => {
+    switch (value) {
+      case 'guncel':
+        return 'Güncel';
+      case 'ekip':
+        return 'Ekip Geldi';
+      case 'cikarildi':
+        return 'Çıkarıldı';
+      case 'iptal':
+        return 'İptal';
+      default:
+        return 'Güncel';
+    }
+  };
+
   return (
     <>
       <Text>Başlık:</Text>
       <TextInput
+        value={title}
         style={{ borderWidth: 1, borderColor: 'gray', padding: 10 }}
         onChange={e => handleInputChange(e, setTitle)}
+        editable={!noEdit}
       />
 
       <Text>Durum</Text>
-      <Picker
-        selectedValue={selectedCategory}
-        style={{ height: 50, width: '100%' }}
-        onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-      >
-        <Picker.Item label='Güncel' value='guncel' />
-        <Picker.Item label='Ekip Geldi' value='ekip' />
-        <Picker.Item label='Çıkarıldı' value='cikarildi' />
-        <Picker.Item label='İptal' value='iptal' />
-      </Picker>
+      {
+      noEdit === true
+        ? (<Text style={styles.textInputStyle}>{valueToPicker(selectedCategory)}</Text>)
+        : (
+          <Picker
+            selectedValue={selectedCategory}
+            style={{ height: 50, width: '100%' }}
+            onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+          >
+            <Picker.Item label='Güncel' value='guncel' />
+            <Picker.Item label='Ekip Geldi' value='ekip' />
+            <Picker.Item label='Çıkarıldı' value='cikarildi' />
+            <Picker.Item label='İptal' value='iptal' />
+          </Picker>
+          )
+        }
 
       <Text>İrtibat Telefon Numarası:</Text>
       <TextInput
+        value={phone}
+        editable={!noEdit}
         style={{ borderWidth: 1, borderColor: 'gray', padding: 10 }}
         onChange={e => handleInputChange(e, setPhone)}
       />
 
       <Text>Açıklama:</Text>
       <TextInput
+        value={description}
+        editable={!noEdit}
         style={{ borderWidth: 1, borderColor: 'gray', padding: 10 }}
         onChange={e => handleInputChange(e, setDescription)}
       />
 
-      <LocationSelector setLocation={setLocation} />
+      <LocationSelector
+        location={location}
+        noEdit={noEdit}
+        setLocation={setLocation}
+      />
 
     </>
   );

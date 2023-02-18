@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, ScrollView, Modal } from 'react-native';
+import { announcementList as styles } from '../style';
+import { AnnouncementBrowse } from './AnnouncementBrowse';
+import { AnnouncementEdit } from './AnnouncementEdit';
 
-const AnnouncementList = ({ announcements, loading }) => {
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+const AnnouncementList = ({ announcements, loading, user, fetchAnnouncements }) => {
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const TipOlustur = (tip) => {
     if (tip === 'gocuk') {
@@ -48,115 +50,88 @@ const AnnouncementList = ({ announcements, loading }) => {
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return (
-    <ScrollView style={styles.scrollContainer}>
-      {announcements.map((announcement, index) => (
-        <TouchableOpacity key={index} style={styles.itemContainer} onPress={() => { /* add function for tap effect here */ }}>
-          {announcement.thumbnail && (
-            <Image source={{ uri: announcement.thumbnail }} style={styles.thumbnail} />
-          )}
-          <View style={styles.textContainer}>
-            <View style={styles.detailsContainer}>
-              <Text style={styles.type}>{TipOlustur(announcement.type)}</Text>
+    <>
+      <ScrollView style={styles.scrollContainer}>
+        {announcements.map((announcement, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.itemContainer}
+            onPress={() => {
+              /* add function for tap effect here */
+              setSelectedAnnouncement(announcement);
+              setModalVisible(true);
+            }}
+          >
+            {announcement.thumbnail && (
+              <Image source={{ uri: announcement.thumbnail }} style={styles.thumbnail} />
+            )}
+            <View style={styles.textContainer}>
+              <View style={styles.detailsContainer}>
+                <Text style={styles.type}>{TipOlustur(announcement.type)}</Text>
+              </View>
+              <Text style={styles.title}>{announcement.title}</Text>
+              <Text style={styles.description}>{announcement.description}</Text>
+              <View style={styles.detailsContainer}>
+                <Text style={styles.time}>{announcement.time}</Text>
+                {announcement.status === 'passed' && (
+                  <Text style={styles.passed}>Passed</Text>
+                )}
+                {announcement.status === 'cancelled' && (
+                  <Text style={styles.cancelled}>Cancelled</Text>
+                )}
+                {announcement.status === 'waiting' && (
+                  <Text style={styles.waiting}>Waiting</Text>
+                )}
+              </View>
+              <View style={styles.detailsContainer}>
+                <Text>Tip: {announcement.category}</Text>
+              </View>
+              <View style={styles.rightAlign}>
+                <Text>{announcement.username}</Text>
+              </View>
+              <View style={styles.rightAlign}>
+                <Text>{announcement.date && timeAgo(announcement.date)}</Text>
+              </View>
             </View>
-            <Text style={styles.title}>{announcement.title}</Text>
-            <Text style={styles.description}>{announcement.description}</Text>
-            <View style={styles.detailsContainer}>
-              <Text style={styles.time}>{announcement.time}</Text>
-              {announcement.status === 'passed' && (
-                <Text style={styles.passed}>Passed</Text>
-              )}
-              {announcement.status === 'cancelled' && (
-                <Text style={styles.cancelled}>Cancelled</Text>
-              )}
-              {announcement.status === 'waiting' && (
-                <Text style={styles.waiting}>Waiting</Text>
-              )}
-            </View>
-            <View style={styles.detailsContainer}>
-              <Text>Tip: {announcement.category}</Text>
-            </View>
-            <View style={styles.rightAlign}>
-              <Text>{announcement.username}</Text>
-            </View>
-            <View style={styles.rightAlign}>
-              <Text>{announcement.date && timeAgo(announcement.date)}</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      {selectedAnnouncement && (selectedAnnouncement.username !== user.username) && (
+        <Modal
+          animationType='slide'
+          transparent={false}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <AnnouncementBrowse
+            closeModal={() => setModalVisible(false)}
+            fetchAnnouncements={fetchAnnouncements}
+            announcement={selectedAnnouncement}
+            user={user}
+          />
+        </Modal>
+      )}
+      {selectedAnnouncement && (selectedAnnouncement.username === user.username) && (
+        <Modal
+          animationType='slide'
+          transparent={false}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <AnnouncementEdit
+            closeModal={() => setModalVisible(false)}
+            fetchAnnouncements={fetchAnnouncements}
+            announcement={selectedAnnouncement}
+            user={user}
+          />
+        </Modal>
+      )}
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  itemContainer: {
-    flexDirection: 'row',
-    marginVertical: 10,
-    justifyContent: 'flex-start',
-    backgroundColor: 'aliceblue',
-    borderRadius: 10,
-    width: '100%',
-    height: 'auto'
-  },
-  thumbnail: {
-    width: 100,
-    height: 100,
-    resizeMode: 'cover',
-    borderRadius: 10,
-    justifyContent: 'flex-start'
-
-  },
-  textContainer: {
-    justifyContent: 'flex-start',
-    flex: 1,
-    width: '100%',
-    height: 'auto',
-    padding: '15px'
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 18
-  },
-  description: {
-    fontSize: 16,
-    marginVertical: 5
-  },
-  detailsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start'
-  },
-  rightAlign: {
-    flexDirection: 'row',
-    alignItems: 'right',
-    justifyContent: 'flex-end'
-  },
-  type: {
-    fontStyle: 'italic',
-    fontSize: '0.8em'
-  },
-  time: {
-    fontSize: 16
-  },
-  passed: {
-    fontSize: 16,
-    color: 'green'
-  },
-  cancelled: {
-    fontSize: 16,
-    color: 'red'
-  },
-  waiting: {
-    fontSize: 16,
-    color: 'orange'
-  },
-  scrollContainer: {
-    backgroundColor: '#F5FCFF',
-    width: '100%',
-    height: '100%',
-    padding: '10px'
-  }
-});
 
 export default AnnouncementList;

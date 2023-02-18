@@ -66,6 +66,15 @@ const styles = StyleSheet.create({
   email: {
     fontSize: 16,
     color: 'gray'
+  },
+  textInputStyle: {
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    fontSize: 16
   }
 });
 
@@ -97,6 +106,76 @@ export const announcementStyles = StyleSheet.create({
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center'
+  }
+});
+
+export const announcementList = StyleSheet.create({
+  itemContainer: {
+    flexDirection: 'row',
+    marginVertical: 10,
+    justifyContent: 'flex-start',
+    backgroundColor: 'aliceblue',
+    borderRadius: 10,
+    width: '100%',
+    height: 'auto'
+  },
+  thumbnail: {
+    width: 100,
+    height: 100,
+    resizeMode: 'cover',
+    borderRadius: 10,
+    justifyContent: 'flex-start'
+
+  },
+  textContainer: {
+    justifyContent: 'flex-start',
+    flex: 1,
+    width: '100%',
+    height: 'auto',
+    padding: '15px'
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  description: {
+    fontSize: 16,
+    marginVertical: 5
+  },
+  detailsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  rightAlign: {
+    flexDirection: 'row',
+    alignItems: 'right',
+    justifyContent: 'flex-end'
+  },
+  type: {
+    fontStyle: 'italic',
+    fontSize: '0.8em'
+  },
+  time: {
+    fontSize: 16
+  },
+  passed: {
+    fontSize: 16,
+    color: 'green'
+  },
+  cancelled: {
+    fontSize: 16,
+    color: 'red'
+  },
+  waiting: {
+    fontSize: 16,
+    color: 'orange'
+  },
+  scrollContainer: {
+    backgroundColor: '#F5FCFF',
+    width: '100%',
+    height: '100%',
+    padding: '10px'
   }
 });
 

@@ -14,6 +14,8 @@ export const Announcement = ({ navigation, user, announcements, fetchAnnouncemen
       <AnnouncementList
         announcements={announcements}
         loading={loading}
+        user={user}
+        fetchAnnouncements={fetchAnnouncements}
       />
       <TouchableOpacity
         style={styles.addButton}

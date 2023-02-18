@@ -40,6 +40,10 @@ const App = () => {
 
   return (
     <>
+      <StatusBar style='auto' />
+      <Toaster
+        position='bottom-center'
+      />
       <NavigationContainer>
         <Drawer.Navigator initialRouteName='Genel'>
           <Drawer.Screen
@@ -96,9 +100,6 @@ const App = () => {
           />
         </Drawer.Navigator>
       </NavigationContainer>
-      <Toaster
-        position='bottom-center'
-      />
     </>
   );
 };
