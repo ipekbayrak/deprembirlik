@@ -100,7 +100,7 @@ const AnnouncementList = ({ announcements, loading, user, fetchAnnouncements }) 
           </TouchableOpacity>
         ))}
       </ScrollView>
-      {selectedAnnouncement && (selectedAnnouncement.username !== user.username) && (
+      {selectedAnnouncement && (!user || (selectedAnnouncement.username !== user.username)) && (
         <Modal
           animationType='slide'
           transparent={false}
@@ -115,7 +115,7 @@ const AnnouncementList = ({ announcements, loading, user, fetchAnnouncements }) 
           />
         </Modal>
       )}
-      {selectedAnnouncement && (selectedAnnouncement.username === user.username) && (
+      {selectedAnnouncement && user && (selectedAnnouncement.username === user.username) && (
         <Modal
           animationType='slide'
           transparent={false}
