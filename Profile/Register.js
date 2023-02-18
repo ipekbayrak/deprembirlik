@@ -72,12 +72,12 @@ const Register = ({ navigation, setUser }) => {
         })
       });
       const data = await response.json();
-
+      const error = data && data.message;
       if (data.status === true) {
         if (Platform.OS === 'web') {
-          toast('Here is your toast.');
+          toast('Kullanıcı kaydı başarılı');
         } else {
-          Alert.alert('Data fetched successfully!');
+          Alert.alert('Kullanıcı kaydı başarılı');
         }
         // Store the login state in AsyncStorage
         const user = { username, email, password };
@@ -87,14 +87,19 @@ const Register = ({ navigation, setUser }) => {
         navigation.navigate('Ana Sayfa');
       } else {
         if (Platform.OS === 'web') {
-          toast.error('Error!');
+          toast.error('Hata! ' + error);
         } else {
-          Alert.alert('Data fetched successfully!');
+          Alert.alert('Hata! ' + error);
         }
       }
     } catch (error) {
       setErrorMessage('An error occurred. Please try again later.');
       console.error(error);
+      if (Platform.OS === 'web') {
+        toast.error('Hata! ' + error.message);
+      } else {
+        Alert.alert('Hata! ' + error.message);
+      }
     }
   };
 
