@@ -8,11 +8,11 @@ const LocationSelector = ({ location, setLocation, noEdit }) => {
 
   useEffect(() => {
     if (Platform.OS === 'web') {
-      if (!noEdit) {
+      if (navigator.geolocation && !noEdit && !location) {
         navigator.geolocation.getCurrentPosition(
           position => {
-            setCenter([position.coords.latitude, position.coords.longitude]);
-            setLocation && setLocation([position.coords.latitude, position.coords.longitude]);
+            setCenter([position.coords.latitude.toString(), position.coords.longitude.toString()]);
+            setLocation && setLocation([position.coords.latitude.toString(), position.coords.longitude.toString()]);
             setZoom(15);
           },
           error => console.error(error),
@@ -35,6 +35,7 @@ const LocationSelector = ({ location, setLocation, noEdit }) => {
             zoom={zoom}
             onBoundsChanged={({ center, zoom }) => {
               !noEdit && setCenter(center);
+              setLocation && setLocation([center[0].toString(), center[1].toString()]);
               setZoom(zoom);
             }}
           >
