@@ -8,8 +8,9 @@ const Kayip = ({ setAnnouncement, announcement, noEdit }) => {
   const [title, setTitle] = useState(announcement ? announcement.title : '');
   const [description, setDescription] = useState(announcement ? announcement.description : '');
   const [selectedCategory, setSelectedCategory] = useState(announcement ? announcement.category : 'kimsesiz');
-  const [location, setLocation] = useState(announcement ? announcement.location : [38.895, 35.452]);
-  const [name, setName] = useState(announcement ? announcement.name : '');
+  const x = (announcement && announcement.location) ? parseFloat(announcement.location[0]) : 38.895;
+  const y = (announcement && announcement.location) ? parseFloat(announcement.location[1]) : 35.452;
+  const [location, setLocation] = useState([x, y]);  const [name, setName] = useState(announcement ? announcement.name : '');
   const [phone, setPhone] = useState(announcement ? announcement.phone : '');
 
   const handleInputChange = (e, setter) => {
