@@ -13,7 +13,6 @@ const strLocationToFloatLocation = (strLocation) => {
   return [parseFloat(strLocation[0]), parseFloat(strLocation[1])];
 };
 
-
 const Harita = ({ navigation, announcements }) => {
   const [center, setCenter] = useState([38.957264, 35.3982175]);
   const [zoom, setZoom] = useState(6);
@@ -52,19 +51,20 @@ const Harita = ({ navigation, announcements }) => {
           }}
         >
           {announcements.map((announcement, index) => (
-            <Marker
-              key={index}
-              width={50}
-              anchor={strLocationToFloatLocation(announcement.location)}
-              payload={index}
-              color={
+            announcement.location &&
+              <Marker
+                key={index}
+                width={50}
+                anchor={strLocationToFloatLocation(announcement.location)}
+                payload={index}
+                color={
                 (announcement.type === 'kayip' && color1) ||
                 (announcement.type === 'gocuk' && color2) ||
                 (announcement.type === 'erzak' && color3) ||
                 (announcement.type === 'barinma' && color4)
               }
-              onClick={() => openInfoDialog(announcement)}
-            />
+                onClick={() => openInfoDialog(announcement)}
+              />
           ))}
         </Map>
       )}

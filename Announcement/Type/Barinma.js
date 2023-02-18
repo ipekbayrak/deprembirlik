@@ -8,9 +8,14 @@ const Barinma = ({ setAnnouncement, announcement, noEdit }) => {
   const [title, setTitle] = useState(announcement ? announcement.title : '');
   const [description, setDescription] = useState(announcement ? announcement.description : '');
   const [selectedCategory, setSelectedCategory] = useState(announcement ? announcement.category : 'organizasyon');
-  const x = (announcement && announcement.location) ? parseFloat(announcement.location[0]) : 38.895;
-  const y = (announcement && announcement.location) ? parseFloat(announcement.location[1]) : 35.452;
-  const [location, setLocation] = useState([x, y]);
+  const x = (announcement && announcement.location) ? parseFloat(announcement.location[0]) : 0;
+  const y = (announcement && announcement.location) ? parseFloat(announcement.location[1]) : 0;
+  let xy = [x, y];
+  if (x === 0 && y === 0) {
+    xy = null;
+  }
+  const [location, setLocation] = useState(xy);
+
   const [phone, setPhone] = useState(announcement ? announcement.phone : '');
   const [capacity, setCapacity] = useState(announcement ? announcement.capacity : '');
 
