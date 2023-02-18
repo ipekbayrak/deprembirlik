@@ -26,7 +26,7 @@ export const AnnouncementAdd = ({ closeModal, user, fetchAnnouncements }) => {
         body: JSON.stringify({ announcement })
       });
       const data = await response.json();
-
+      const error = data && data.message;
       if (data.status === true) {
         toastHelper('Duyuru eklendi!', 'success');
         closeModal();
@@ -35,7 +35,7 @@ export const AnnouncementAdd = ({ closeModal, user, fetchAnnouncements }) => {
         // Navigate to the Home screen
         // navigation.navigate('Ana Sayfa');
       } else {
-        toastHelper('Hata!', 'error');
+        toastHelper('Hata! ' + error, 'error');
       }
     } catch (error) {
       toastHelper('Çalışma zamanı hatası!', 'error');
