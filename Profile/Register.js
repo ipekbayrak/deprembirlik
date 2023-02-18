@@ -81,8 +81,8 @@ const Register = ({ navigation, setUser }) => {
         }
         // Store the login state in AsyncStorage
         const user = { username, email, password };
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
+        await AsyncStorage.setItem('user', JSON.stringify({ ...user, ...data }));
+        setUser({ ...user, ...data });
         // Navigate to the Home screen
         navigation.navigate('Ana Sayfa');
       } else {
