@@ -7,6 +7,7 @@ import Erzak from './Type/Erzak';
 import Barinma from './Type/Barinma';
 import Ulasim from './Type/Ulasim';
 import toastHelper from '../toastHelper';
+import { Toaster } from 'react-hot-toast';
 
 export const AnnouncementEdit = ({ announcement, closeModal, user, fetchAnnouncements }) => {
   const selectedCategory = announcement.type;
@@ -41,30 +42,33 @@ export const AnnouncementEdit = ({ announcement, closeModal, user, fetchAnnounce
   };
 
   return (
-    <ScrollView style={styles.scrollContainer}>
-      {(selectedCategory === 'gocuk') && (<GocukComponent announcement={announcement_} setAnnouncement={setAnnouncement} />)}
-      {(selectedCategory === 'kayip') && (<Kayip announcement={announcement_} setAnnouncement={setAnnouncement} />)}
-      {(selectedCategory === 'erzak') && (<Erzak announcement={announcement_} setAnnouncement={setAnnouncement} />)}
-      {(selectedCategory === 'barinma') && (<Barinma announcement={announcement_} setAnnouncement={setAnnouncement} />)}
-      {(selectedCategory === 'ulasim') && (<Ulasim announcement={announcement_} setAnnouncement={setAnnouncement} />)}
+    <>
+      <Toaster position='top-center' />
+      <ScrollView style={styles.scrollContainer}>
+        {(selectedCategory === 'gocuk') && (<GocukComponent announcement={announcement_} setAnnouncement={setAnnouncement} />)}
+        {(selectedCategory === 'kayip') && (<Kayip announcement={announcement_} setAnnouncement={setAnnouncement} />)}
+        {(selectedCategory === 'erzak') && (<Erzak announcement={announcement_} setAnnouncement={setAnnouncement} />)}
+        {(selectedCategory === 'barinma') && (<Barinma announcement={announcement_} setAnnouncement={setAnnouncement} />)}
+        {(selectedCategory === 'ulasim') && (<Ulasim announcement={announcement_} setAnnouncement={setAnnouncement} />)}
 
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={() => {
-          console.log(announcement_);
-          handleAnnouncement();
-        }}
-      >
-        <Text style={styles.buttonText}>Düzenle</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={() => {
+            console.log(announcement_);
+            handleAnnouncement();
+          }}
+        >
+          <Text style={styles.buttonText}>Düzenle</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={closeModal}
-      >
-        <Text style={styles.buttonText}>Kapat</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={closeModal}
+        >
+          <Text style={styles.buttonText}>Kapat</Text>
+        </TouchableOpacity>
 
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };

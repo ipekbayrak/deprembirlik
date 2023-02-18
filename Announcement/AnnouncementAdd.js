@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { Text, TouchableOpacity, ScrollView } from 'react-native';
 import CategorySelect from './CategorySelect';
 import GocukComponent from './Type/GocukComponent';
 import styles from '../style';
@@ -8,6 +8,7 @@ import Erzak from './Type/Erzak';
 import Barinma from './Type/Barinma';
 import Ulasim from './Type/Ulasim';
 import toastHelper from '../toastHelper';
+import { Toaster } from 'react-hot-toast';
 
 export const AnnouncementAdd = ({ closeModal, user, fetchAnnouncements }) => {
   const [selectedCategory, setSelectedCategory] = useState();
@@ -43,37 +44,40 @@ export const AnnouncementAdd = ({ closeModal, user, fetchAnnouncements }) => {
   };
 
   return (
-    <ScrollView style={styles.scrollContainer}>
-      <CategorySelect
-        setSelectedCategory={setSelectedCategory}
-        setActive={setActive}
-      />
-      {(selectedCategory === 'gocuk') && (<GocukComponent setAnnouncement={setAnnouncement} />)}
-      {(selectedCategory === 'kayip') && (<Kayip setAnnouncement={setAnnouncement} />)}
-      {(selectedCategory === 'erzak') && (<Erzak setAnnouncement={setAnnouncement} />)}
-      {(selectedCategory === 'barinma') && (<Barinma setAnnouncement={setAnnouncement} />)}
-      {(selectedCategory === 'ulasim') && (<Ulasim setAnnouncement={setAnnouncement} />)}
+    <>
+      <Toaster position='top-center' />
+      <ScrollView style={styles.scrollContainer}>
+        <CategorySelect
+          setSelectedCategory={setSelectedCategory}
+          setActive={setActive}
+        />
+        {(selectedCategory === 'gocuk') && (<GocukComponent setAnnouncement={setAnnouncement} />)}
+        {(selectedCategory === 'kayip') && (<Kayip setAnnouncement={setAnnouncement} />)}
+        {(selectedCategory === 'erzak') && (<Erzak setAnnouncement={setAnnouncement} />)}
+        {(selectedCategory === 'barinma') && (<Barinma setAnnouncement={setAnnouncement} />)}
+        {(selectedCategory === 'ulasim') && (<Ulasim setAnnouncement={setAnnouncement} />)}
 
-      {(active) && (
-        <>
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={() => {
-              console.log(announcement);
-              handleAnnouncement();
-            }}
-          >
-            <Text style={styles.buttonText}>Gönder</Text>
-          </TouchableOpacity>
+        {(active) && (
+          <>
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={() => {
+                console.log(announcement);
+                handleAnnouncement();
+              }}
+            >
+              <Text style={styles.buttonText}>Gönder</Text>
+            </TouchableOpacity>
 
-        </>)}
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={closeModal}
-      >
-        <Text style={styles.buttonText}>İptal</Text>
-      </TouchableOpacity>
+          </>)}
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={closeModal}
+        >
+          <Text style={styles.buttonText}>İptal</Text>
+        </TouchableOpacity>
 
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
