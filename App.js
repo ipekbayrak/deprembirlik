@@ -1,8 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
@@ -17,9 +15,6 @@ import { Toaster } from 'react-hot-toast';
 import Hakkinda from './Hakkinda';
 const Drawer = createDrawerNavigator();
 
-const HomeStack = createStackNavigator();
-const SettingsStack = createStackNavigator();
-
 const App = () => {
   const [user, setUser] = useState(null);
   const [anaSayfa, setAnaSayfa] = useState('Ana Sayfa');
@@ -27,9 +22,14 @@ const App = () => {
   useEffect(() => {
     const fetchIsLoggedIn = async () => {
       try {
-        const value = await AsyncStorage.getItem('user') || null;
+        let value = await AsyncStorage.getItem('user') || null;
         if (value !== null) {
-          setUser(JSON.parse(value));
+          value = JSON.parse(value);
+        }
+        if (value.token && value.username && value.email) {
+          setUser(value);
+        } else {
+          await AsyncStorage.removeItem('user');
         }
       } catch (error) {
         console.error('Error fetching isLoggedIn from AsyncStorage: ', error);
