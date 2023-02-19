@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
-import { Map, Marker } from 'pigeon-maps';
+import { View, Text, StyleSheet, Platform, Modal } from 'react-native';
+import { Map, Marker, Overlay } from 'pigeon-maps';
 import { AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-
-const CustomMarkerIcon = ({ name, color }) => {
+import { AnnouncementBrowse } from './Announcement/AnnouncementBrowse';
+import './mapStyle.css';
+const CustomMarkerIcon = ({ announcement }) => {
+  const color = (announcement.type === 'kayip' && 'blue') ||
+  (announcement.type === 'gocuk' && 'red') ||
+  (announcement.type === 'erzak' && 'green') ||
+  (announcement.type === 'barinma' && 'grey');
+  const name = (announcement.type === 'kayip' && 'map-marker-account-outline') ||
+  (announcement.type === 'gocuk' && 'map-marker-alert-outline') ||
+  (announcement.type === 'erzak' && 'archive-marker-outline') ||
+  (announcement.type === 'barinma' && 'home-map-marker');
   return (
-    <MaterialCommunityIcons name={name} size={65} color={color} />
+    <MaterialCommunityIcons
+      name={name}
+      size={30}
+      color={color}
+    />
   );
 };
 
@@ -21,7 +34,11 @@ const Harita = ({ navigation, announcements }) => {
   const color3 = `hsl(${40 % 360}deg 39% 70%)`;
   const color4 = `hsl(${60 % 360}deg 39% 70%)`;
 
-  const openInfoDialog = (announcement) => {};
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+
+  const openInfoDialog = (announcement) => {
+    setSelectedAnnouncement(announcement);
+  };
 
   const TipOlustur = (tip) => {
     if (tip === 'gocuk') {
@@ -57,16 +74,28 @@ const Harita = ({ navigation, announcements }) => {
                 width={50}
                 anchor={strLocationToFloatLocation(announcement.location)}
                 payload={index}
-                color={
-                (announcement.type === 'kayip' && color1) ||
-                (announcement.type === 'gocuk' && color2) ||
-                (announcement.type === 'erzak' && color3) ||
-                (announcement.type === 'barinma' && color4)
-              }
                 onClick={() => openInfoDialog(announcement)}
-              />
+              >
+                <CustomMarkerIcon
+                  announcement={announcement}
+                />
+
+              </Marker>
           ))}
         </Map>
+      )}
+      {selectedAnnouncement && (
+        <Modal
+          animationType='slide'
+          transparent={false}
+          visible={selectedAnnouncement}
+          onRequestClose={() => setSelectedAnnouncement(null)}
+        >
+          <AnnouncementBrowse
+            closeModal={() => setSelectedAnnouncement(null)}
+            announcement={selectedAnnouncement}
+          />
+        </Modal>
       )}
     </View>
   );

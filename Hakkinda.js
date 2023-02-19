@@ -16,7 +16,7 @@ const Hakkinda = () => {
         {'\n\n'}
         Bu uygulamanın depremzedelere yardımcı olacağını umuyorum.
       </Text>
-      <Text style={{ padding: 5 }}>Versiyon:0.1.2</Text>
+      <Text style={{ padding: 5 }}>Versiyon:0.1.3</Text>
     </View>
   );
 };
