@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import GocukComponent from './Type/GocukComponent';
 import styles from '../style';
 import Kayip from './Type/Kayip';
@@ -13,7 +13,7 @@ export const AnnouncementEdit = ({ announcement, closeModal, user, fetchAnnounce
   const selectedCategory = announcement.type;
   const [announcement_, setAnnouncement] = useState(announcement);
 
-  const handleAnnouncement = async () => {
+  const handleAnnouncement = async (del) => {
     try {
       const response = await fetch('https://data.mongodb-api.com/app/data-zaqgh/endpoint/announcement', {
         method: 'PUT',
@@ -21,7 +21,7 @@ export const AnnouncementEdit = ({ announcement, closeModal, user, fetchAnnounce
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + user.token
         },
-        body: JSON.stringify({ announcement: announcement_ })
+        body: JSON.stringify({ announcement: { ...announcement_, deleted: del === true ? true : undefined } })
       });
       const data = await response.json();
       const error = data && data.message;
@@ -29,9 +29,6 @@ export const AnnouncementEdit = ({ announcement, closeModal, user, fetchAnnounce
         toastHelper('Duyuru düzenlendi!', 'success');
         closeModal();
         fetchAnnouncements();
-        // Store the login state in AsyncStorage
-        // Navigate to the Home screen
-        // navigation.navigate('Ana Sayfa');
       } else {
         toastHelper('Hata! ' + error, 'error');
       }
@@ -50,6 +47,15 @@ export const AnnouncementEdit = ({ announcement, closeModal, user, fetchAnnounce
         {(selectedCategory === 'erzak') && (<Erzak announcement={announcement_} setAnnouncement={setAnnouncement} />)}
         {(selectedCategory === 'barinma') && (<Barinma announcement={announcement_} setAnnouncement={setAnnouncement} />)}
         {(selectedCategory === 'ulasim') && (<Ulasim announcement={announcement_} setAnnouncement={setAnnouncement} />)}
+
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => {
+            handleAnnouncement(true);
+          }}
+        >
+          <Text style={styles.buttonText}>Sil</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.saveButton}

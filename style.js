@@ -47,6 +47,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20
   },
+  deleteButton: {
+    backgroundColor: 'red',
+    padding: 12,
+    alignItems: 'center',
+    marginTop: 20
+  },
   buttonText: {
     fontSize: 18,
     fontWeight: 'bold',
