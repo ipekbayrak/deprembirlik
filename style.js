@@ -11,7 +11,9 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#F5FCFF',
+    height: '100%',
+    width: '100%'
   },
   item: {
     padding: 10,
@@ -184,5 +186,180 @@ export const announcementList = StyleSheet.create({
     padding: '10px'
   }
 });
+
+const markdown = {
+  heading1: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  heading2: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  heading3: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  heading4: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  heading5: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  heading6: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  text: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  link: {
+    fontSize: 14,
+    color: 'blue',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  list: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  listItem: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  listItemNumber: {
+    fontSize: 14,
+
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  listItemBullet: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  listItemOrderedContent: {
+    fontSize: 14,
+    color: 'black',
+
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  listItemUnorderedContent: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  strong: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  em: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  u: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  s: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  del: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  inlineCode: {
+
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  blockQuote: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  blockQuoteSection: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  blockQuoteSectionBar: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  hr: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  table: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  tableHeader: {
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  tableHeaderCell: {
+    fontSize: 14,
+    color: 'black',
+
+    textAlign: 'left',
+    marginBottom: 20
+  }
+};
 
 export default styles;
